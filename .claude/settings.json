@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm run:*)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\nbware\\.claude\\projects\\c--WorkSpace-Projects--personal-taupt-official\\memory"
+    ]
+  }
+}
