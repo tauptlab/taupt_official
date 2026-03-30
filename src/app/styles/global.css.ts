@@ -7,13 +7,35 @@ globalStyle('*, *::before, *::after', {
 })
 
 globalStyle(':root', {
-  fontFamily: 'system-ui, sans-serif',
+  fontFamily: "'Inter', system-ui, sans-serif",
   lineHeight: '1.5',
   fontSynthesis: 'none',
   textRendering: 'optimizeLegibility',
   WebkitFontSmoothing: 'antialiased',
+  scrollBehavior: 'smooth',
 })
 
 globalStyle('body', {
   minHeight: '100vh',
+})
+
+globalStyle('a', {
+  textDecoration: 'none',
+  color: 'inherit',
+})
+
+globalStyle('button', {
+  cursor: 'pointer',
+  border: 'none',
+  background: 'none',
+  font: 'inherit',
+})
+
+globalStyle('ul, ol', {
+  listStyle: 'none',
+})
+
+globalStyle('img', {
+  maxWidth: '100%',
+  display: 'block',
 })

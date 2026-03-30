@@ -20,12 +20,12 @@ export const base = style({
 
 export const variants = styleVariants({
   primary: {
-    backgroundColor: themeContract.color.primary,
-    color: themeContract.color.primaryForeground,
+    backgroundColor: themeContract.color.accent,
+    color: themeContract.color.accentText,
   },
   ghost: {
     backgroundColor: 'transparent',
-    color: themeContract.color.foreground,
+    color: themeContract.color.text,
     border: `1px solid currentColor`,
   },
 })
