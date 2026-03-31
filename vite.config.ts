@@ -26,6 +26,8 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom'],
           state:  ['zustand'],
+          router: ['react-router-dom'],
+          markdown: ['gray-matter', 'marked'],
         },
       },
     },

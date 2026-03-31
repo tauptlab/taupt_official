@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppStore } from '@shared/store'
 import * as styles from './Header.css'
 
@@ -6,9 +7,12 @@ const navLinks = [
   { label: 'Who we are', href: '#about' },
   { label: 'Work', href: '#work' },
   { label: 'Contact', href: '#contact' },
+  { label: 'Blog', href: '/blog' },
 ]
 
 export function Header() {
+  const navigate = useNavigate()
+  const location = useLocation()
   const { isMenuOpen, isDarkMode, toggleMenu, toggleDarkMode } = useAppStore()
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
@@ -42,7 +46,18 @@ export function Header() {
 
   const handleNavClick = (href: string) => {
     if (isMenuOpen) handleCloseMenu()
-    // small delay so close animation plays before scroll
+    if (href.startsWith('/')) {
+      setTimeout(() => navigate(href), isMenuOpen ? 360 : 0)
+      return
+    }
+    // anchor scroll — if not on home page, navigate there first
+    if (location.pathname !== '/') {
+      navigate('/')
+      setTimeout(() => {
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+      }, 400)
+      return
+    }
     setTimeout(() => {
       document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
     }, isMenuOpen ? 360 : 0)
@@ -62,9 +77,9 @@ export function Header() {
     <>
       <header className={headerClass}>
         <a
-          href="#"
+          href="/"
           className={`${styles.logo} ${atTop ? styles.logoWhite : ''}`}
-          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+          onClick={(e) => { e.preventDefault(); location.pathname === '/' ? window.scrollTo({ top: 0, behavior: 'smooth' }) : navigate('/') }}
         >
           TaupT
         </a>
