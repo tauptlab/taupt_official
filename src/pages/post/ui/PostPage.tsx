@@ -15,7 +15,7 @@ function formatDate(dateStr: string, lang: 'ko' | 'en'): string {
 }
 
 export function PostPage() {
-  const { slug } = useParams<{ slug: string }>()
+  const { slug, locale = 'kor' } = useParams<{ slug: string; locale: string }>()
   const navigate = useNavigate()
   const { lang } = useAppStore()
   const t = getT(lang)
@@ -61,7 +61,7 @@ export function PostPage() {
       <Header />
 
       <div className={styles.hero}>
-        <button className={styles.backBtn} onClick={() => navigate('/blog')}>
+        <button className={styles.backBtn} onClick={() => navigate(`/${locale}/blog`)}>
           {t.blog.back}
         </button>
 
@@ -134,7 +134,7 @@ export function PostPage() {
           <h2 className={styles.relatedTitle}>{t.blog.related}</h2>
           <div className={styles.relatedGrid}>
             {related.map((p) => (
-              <RelatedCard key={p.slug} post={p} onClick={() => navigate(`/blog/${p.slug}`)} />
+              <RelatedCard key={p.slug} post={p} onClick={() => navigate(`/${locale}/blog/${p.slug}`)} />
             ))}
           </div>
         </div>

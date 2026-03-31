@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { gsap } from '@shared/lib/gsap'
 import { getAllPosts, getAllCategories, type PostMeta } from '@shared/lib/posts'
 import { useAppStore } from '@shared/store'
@@ -17,6 +17,7 @@ function formatDate(dateStr: string, lang: 'ko' | 'en'): string {
 
 export function BlogPage() {
   const navigate = useNavigate()
+  const { locale = 'kor' } = useParams<{ locale: string }>()
   const { lang } = useAppStore()
   const t = getT(lang)
   const [activeCategory, setActiveCategory] = useState<string>(t.blog.allCategory)
@@ -52,7 +53,7 @@ export function BlogPage() {
     return () => ctx.revert()
   }, [activeCategory, lang])
 
-  const goPost = (slug: string) => navigate(`/blog/${slug}`)
+  const goPost = (slug: string) => navigate(`/${locale}/blog/${slug}`)
 
   const titleLines = t.blog.title.split('\n')
 

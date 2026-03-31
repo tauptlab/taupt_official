@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useAppStore } from '@shared/store'
 import { getT } from '@shared/lib/i18n'
 import * as styles from './Footer.css'
@@ -7,17 +7,19 @@ import * as styles from './Footer.css'
 export function Footer() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { locale = 'kor' } = useParams<{ locale: string }>()
   const { lang, isDarkMode } = useAppStore()
   const t = getT(lang)
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
     if (href.startsWith('/')) {
-      navigate(href)
+      navigate(`/${locale}${href}`)
       return
     }
-    if (location.pathname !== '/') {
-      navigate('/')
+    const homePath = `/${locale}`
+    if (location.pathname !== homePath) {
+      navigate(homePath)
       setTimeout(() => {
         document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
       }, 400)

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useAppStore } from '@shared/store'
 import { getT } from '@shared/lib/i18n'
 import * as styles from './Header.css'
@@ -7,7 +7,8 @@ import * as styles from './Header.css'
 export function Header() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { isMenuOpen, isDarkMode, lang, toggleMenu, toggleDarkMode, toggleLang } = useAppStore()
+  const { locale = 'kor' } = useParams<{ locale: string }>()
+  const { isMenuOpen, isDarkMode, lang, toggleMenu, toggleDarkMode } = useAppStore()
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [closing, setClosing] = useState(false)
@@ -19,8 +20,14 @@ export function Header() {
     { label: t.nav.whoWeAre, href: '#about' },
     { label: t.nav.work, href: '#work' },
     { label: t.nav.contact, href: '#contact' },
-    { label: t.nav.blog, href: '/blog' },
+    { label: t.nav.blog, href: `/${locale}/blog` },
   ]
+
+  const handleToggleLang = () => {
+    const newLocale = locale === 'kor' ? 'eng' : 'kor'
+    const newPath = location.pathname.replace(`/${locale}`, `/${newLocale}`)
+    navigate(newPath)
+  }
 
   // Scroll-based header state
   useEffect(() => {
@@ -52,8 +59,9 @@ export function Header() {
       setTimeout(() => navigate(href), isMenuOpen ? 360 : 0)
       return
     }
-    if (location.pathname !== '/') {
-      navigate('/')
+    const homePath = `/${locale}`
+    if (location.pathname !== homePath) {
+      navigate(homePath)
       setTimeout(() => {
         document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
       }, 400)
@@ -78,7 +86,7 @@ export function Header() {
         <a
           href="/"
           className={styles.logo}
-          onClick={(e) => { e.preventDefault(); location.pathname === '/' ? window.scrollTo({ top: 0, behavior: 'smooth' }) : navigate('/') }}
+          onClick={(e) => { e.preventDefault(); location.pathname === `/${locale}` ? window.scrollTo({ top: 0, behavior: 'smooth' }) : navigate(`/${locale}`) }}
         >
           <img
             src="/images/taupt_logo_black.png"
@@ -104,7 +112,7 @@ export function Header() {
           {/* Language toggle */}
           <button
             className={`${styles.darkModeBtn} ${atTop ? styles.darkModeBtnWhite : ''}`}
-            onClick={toggleLang}
+            onClick={handleToggleLang}
             aria-label="Toggle language"
             style={{ fontWeight: 600, fontSize: '12px', letterSpacing: '0.5px' }}
           >
@@ -170,7 +178,7 @@ export function Header() {
           <div className={styles.mobileMenuBottom}>
             <span className={styles.mobileMenuBottomText}>TaupT © {new Date().getFullYear()}</span>
             <div style={{ display: 'flex', gap: '12px' }}>
-              <button className={styles.mobileDarkBtn} onClick={toggleLang}>
+              <button className={styles.mobileDarkBtn} onClick={handleToggleLang}>
                 {lang === 'ko' ? '🌐 English' : '🌐 한국어'}
               </button>
               <button className={styles.mobileDarkBtn} onClick={toggleDarkMode}>

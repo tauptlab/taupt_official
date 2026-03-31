@@ -7,7 +7,7 @@ interface AppState {
   lang: Lang
   toggleMenu: () => void
   toggleDarkMode: () => void
-  toggleLang: () => void
+  setLang: (lang: Lang) => void
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -16,5 +16,5 @@ export const useAppStore = create<AppState>((set) => ({
   lang: 'ko',
   toggleMenu: () => set((state) => ({ isMenuOpen: !state.isMenuOpen })),
   toggleDarkMode: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
-  toggleLang: () => set((state) => ({ lang: state.lang === 'ko' ? 'en' : 'ko' })),
+  setLang: (lang) => set({ lang }),
 }))
