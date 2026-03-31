@@ -61,7 +61,7 @@ export const content = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '20px',
-  maxWidth: '520px',
+  maxWidth: '40vw',
   '@media': {
     '(max-width: 768px)': {
       left: '1.25rem',

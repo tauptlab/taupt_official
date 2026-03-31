@@ -7,7 +7,7 @@ globalStyle('*, *::before, *::after', {
 })
 
 globalStyle(':root', {
-  fontFamily: "'Inter', system-ui, sans-serif",
+  fontFamily: "'Pretendard', system-ui, sans-serif",
   lineHeight: '1.5',
   fontSynthesis: 'none',
   textRendering: 'optimizeLegibility',

@@ -27,10 +27,15 @@ export const footerLeft = style({
 })
 
 export const footerLogo = style({
-  fontSize: '24px',
-  fontWeight: '700',
-  color: themeContract.color.text,
-  letterSpacing: '-0.5px',
+  display: 'block',
+})
+
+export const footerLogoImg = style({
+  height: '45px',
+  width: 'auto',
+  display: 'block',
+  // dark mode invert is applied inline via isDarkMode state
+  transition: 'filter 0.3s',
 })
 
 export const footerDesc = style({

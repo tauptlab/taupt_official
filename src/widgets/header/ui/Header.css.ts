@@ -41,16 +41,25 @@ export const headerHidden = style({
 
 /* -------- Logo -------- */
 export const logo = style({
-  fontSize: '20px',
-  fontWeight: '700',
-  letterSpacing: '-0.5px',
+  display: 'flex',
+  alignItems: 'center',
   cursor: 'pointer',
-  transition: 'color 0.3s',
-  color: themeContract.color.text,
+  flexShrink: 0,
 })
 
-export const logoWhite = style({
-  color: '#ffffff',
+export const logoImg = style({
+  height: '45px',
+  width: 'auto',
+  display: 'block',
+  transition: 'filter 0.3s',
+  // dark mode: invert black logo to white via CSS variable trick
+  // handled via logoWhite / logoInvert class
+})
+
+export const logoWhite = style({})
+
+export const logoImgWhite = style({
+  filter: 'invert(1)',
 })
 
 /* -------- Nav -------- */

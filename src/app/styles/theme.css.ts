@@ -49,7 +49,7 @@ export const lightTheme = createTheme(themeContract, {
     xxl: '96px',
   },
   font: {
-    body: "'Inter', system-ui, sans-serif",
+    body: "'Pretendard', system-ui, sans-serif",
     mono: "'JetBrains Mono', 'Courier New', monospace",
   },
   radius: {
@@ -79,7 +79,7 @@ export const darkTheme = createTheme(themeContract, {
     xxl: '96px',
   },
   font: {
-    body: "'Inter', system-ui, sans-serif",
+    body: "'Pretendard', system-ui, sans-serif",
     mono: "'JetBrains Mono', 'Courier New', monospace",
   },
   radius: {

@@ -2,28 +2,34 @@ import { useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { gsap } from '@shared/lib/gsap'
 import { getPostBySlug, getAllPosts, type PostMeta } from '@shared/lib/posts'
+import { useAppStore } from '@shared/store'
+import { getT } from '@shared/lib/i18n'
 import { Header } from '@widgets/header'
 import * as styles from './PostPage.css'
 
-function formatDate(dateStr: string): string {
+function formatDate(dateStr: string, lang: 'ko' | 'en'): string {
   const d = new Date(dateStr)
-  return d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+  return lang === 'ko'
+    ? d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+    : d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
 export function PostPage() {
   const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
+  const { lang } = useAppStore()
+  const t = getT(lang)
   const proseRef = useRef<HTMLDivElement>(null)
 
-  const post = slug ? getPostBySlug(slug) : undefined
-  const allPosts = getAllPosts()
+  const post = slug ? getPostBySlug(slug, lang) : undefined
+  const allPosts = getAllPosts(lang)
   const related = allPosts
     .filter((p) => p.slug !== slug && p.category === post?.category)
     .slice(0, 3)
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
-  }, [slug])
+  }, [slug, lang])
 
   useEffect(() => {
     if (!proseRef.current) return
@@ -37,14 +43,14 @@ export function PostPage() {
       })
     })
     return () => ctx.revert()
-  }, [slug])
+  }, [slug, lang])
 
   if (!post) {
     return (
       <div className={styles.page}>
         <Header />
         <div style={{ paddingTop: '140px', paddingLeft: '4rem', color: 'var(--color-textMuted)' }}>
-          포스트를 찾을 수 없습니다.
+          {lang === 'ko' ? '포스트를 찾을 수 없습니다.' : 'Post not found.'}
         </div>
       </div>
     )
@@ -56,12 +62,12 @@ export function PostPage() {
 
       <div className={styles.hero}>
         <button className={styles.backBtn} onClick={() => navigate('/blog')}>
-          ← 블로그로 돌아가기
+          {t.blog.back}
         </button>
 
         <div className={styles.heroMeta}>
           <span className={styles.categoryBadge}>{post.category}</span>
-          <span className={styles.heroDate}>{formatDate(post.date)}</span>
+          <span className={styles.heroDate}>{formatDate(post.date, lang)}</span>
         </div>
 
         <h1 className={styles.heroTitle}>{post.title}</h1>
@@ -70,7 +76,7 @@ export function PostPage() {
         <div className={styles.heroAuthor}>
           <span>{post.author}</span>
           <span className={styles.authorDot} />
-          <span>{formatDate(post.date)}</span>
+          <span>{formatDate(post.date, lang)}</span>
           {post.tags.length > 0 && (
             <>
               <span className={styles.authorDot} />
@@ -85,28 +91,26 @@ export function PostPage() {
       )}
 
       <div className={styles.layout}>
-        {/* Main content */}
         <div
           ref={proseRef}
           className={styles.prose}
           dangerouslySetInnerHTML={{ __html: post.html }}
         />
 
-        {/* Sidebar */}
         <aside className={styles.sidebar}>
           <div className={styles.sidebarSection}>
-            <p className={styles.sidebarTitle}>포스트 정보</p>
+            <p className={styles.sidebarTitle}>{t.blog.infoLabel}</p>
             <div className={styles.sidebarInfo}>
               <div className={styles.sidebarInfoRow}>
-                <span className={styles.sidebarInfoLabel}>작성자</span>
+                <span className={styles.sidebarInfoLabel}>{t.blog.authorLabel}</span>
                 <span className={styles.sidebarInfoValue}>{post.author}</span>
               </div>
               <div className={styles.sidebarInfoRow}>
-                <span className={styles.sidebarInfoLabel}>날짜</span>
-                <span className={styles.sidebarInfoValue}>{formatDate(post.date)}</span>
+                <span className={styles.sidebarInfoLabel}>{t.blog.dateLabel}</span>
+                <span className={styles.sidebarInfoValue}>{formatDate(post.date, lang)}</span>
               </div>
               <div className={styles.sidebarInfoRow}>
-                <span className={styles.sidebarInfoLabel}>카테고리</span>
+                <span className={styles.sidebarInfoLabel}>{t.blog.categoryLabel}</span>
                 <span className={styles.sidebarInfoValue}>{post.category}</span>
               </div>
             </div>
@@ -114,7 +118,7 @@ export function PostPage() {
 
           {post.tags.length > 0 && (
             <div className={styles.sidebarSection}>
-              <p className={styles.sidebarTitle}>태그</p>
+              <p className={styles.sidebarTitle}>{t.blog.tagsLabel}</p>
               <div className={styles.tagList}>
                 {post.tags.map((tag) => (
                   <span key={tag} className={styles.tag}>{tag}</span>
@@ -127,7 +131,7 @@ export function PostPage() {
 
       {related.length > 0 && (
         <div className={styles.relatedSection}>
-          <h2 className={styles.relatedTitle}>관련 포스트</h2>
+          <h2 className={styles.relatedTitle}>{t.blog.related}</h2>
           <div className={styles.relatedGrid}>
             {related.map((p) => (
               <RelatedCard key={p.slug} post={p} onClick={() => navigate(`/blog/${p.slug}`)} />

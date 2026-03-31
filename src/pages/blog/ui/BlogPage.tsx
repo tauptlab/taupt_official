@@ -2,25 +2,35 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { gsap } from '@shared/lib/gsap'
 import { getAllPosts, getAllCategories, type PostMeta } from '@shared/lib/posts'
+import { useAppStore } from '@shared/store'
+import { getT } from '@shared/lib/i18n'
 import { Header } from '@widgets/header'
-import * as styles from './BlogPage.css'
 import { Footer } from '@widgets/footer'
+import * as styles from './BlogPage.css'
 
-function formatDate(dateStr: string): string {
+function formatDate(dateStr: string, lang: 'ko' | 'en'): string {
   const d = new Date(dateStr)
-  return d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+  return lang === 'ko'
+    ? d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+    : d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
 export function BlogPage() {
   const navigate = useNavigate()
-  const [activeCategory, setActiveCategory] = useState('All')
+  const { lang } = useAppStore()
+  const t = getT(lang)
+  const [activeCategory, setActiveCategory] = useState<string>(t.blog.allCategory)
   const gridRef = useRef<HTMLDivElement>(null)
-  const heroRef = useRef<HTMLDivElement>(null)
 
-  const allPosts = getAllPosts()
-  const categories = ['All', ...getAllCategories()]
+  const allPosts = getAllPosts(lang)
+  const categories = [t.blog.allCategory, ...getAllCategories(lang)]
 
-  const filtered = activeCategory === 'All'
+  // Reset category filter when language changes
+  useEffect(() => {
+    setActiveCategory(t.blog.allCategory)
+  }, [lang, t.blog.allCategory])
+
+  const filtered = activeCategory === t.blog.allCategory
     ? allPosts
     : allPosts.filter((p) => p.category === activeCategory)
 
@@ -40,20 +50,24 @@ export function BlogPage() {
       })
     }, gridRef)
     return () => ctx.revert()
-  }, [activeCategory])
+  }, [activeCategory, lang])
 
   const goPost = (slug: string) => navigate(`/blog/${slug}`)
+
+  const titleLines = t.blog.title.split('\n')
 
   return (
     <div className={styles.page}>
       <Header />
 
-      <div className={styles.hero} ref={heroRef}>
-        <p className={styles.heroLabel}>Blog</p>
-        <h1 className={styles.heroTitle}>Insights &<br />Stories</h1>
-        <p className={styles.heroDesc}>
-          TaupT 팀이 디자인, 개발, 그리고 디지털 경험에 대해 이야기합니다.
-        </p>
+      <div className={styles.hero}>
+        <p className={styles.heroLabel}>{t.blog.label}</p>
+        <h1 className={styles.heroTitle}>
+          {titleLines.map((line, i) => (
+            <span key={i}>{line}{i < titleLines.length - 1 && <br />}</span>
+          ))}
+        </h1>
+        <p className={styles.heroDesc}>{t.blog.desc}</p>
       </div>
 
       <div className={styles.body}>
@@ -71,7 +85,7 @@ export function BlogPage() {
         </div>
 
         {filtered.length === 0 && (
-          <div className={styles.empty}>해당 카테고리에 포스트가 없습니다.</div>
+          <div className={styles.empty}>{t.blog.empty}</div>
         )}
 
         {/* Featured post */}
@@ -87,7 +101,7 @@ export function BlogPage() {
               <div className={styles.featuredMeta}>
                 <span>{featured.author}</span>
                 <span className={styles.metaDot} />
-                <span>{formatDate(featured.date)}</span>
+                <span>{formatDate(featured.date, lang)}</span>
               </div>
             </div>
           </div>
@@ -97,7 +111,7 @@ export function BlogPage() {
         {rest.length > 0 && (
           <div className={styles.grid} ref={gridRef}>
             {rest.map((post) => (
-              <PostCard key={post.slug} post={post} onClick={() => goPost(post.slug)} />
+              <PostCard key={post.slug} post={post} lang={lang} onClick={() => goPost(post.slug)} />
             ))}
           </div>
         )}
@@ -107,7 +121,7 @@ export function BlogPage() {
   )
 }
 
-function PostCard({ post, onClick }: { post: PostMeta; onClick: () => void }) {
+function PostCard({ post, lang, onClick }: { post: PostMeta; lang: 'ko' | 'en'; onClick: () => void }) {
   return (
     <div className={styles.card} onClick={onClick}>
       <div className={styles.cardImgWrap}>
@@ -120,7 +134,7 @@ function PostCard({ post, onClick }: { post: PostMeta; onClick: () => void }) {
         <div className={styles.cardMeta}>
           <span>{post.author}</span>
           <span className={styles.metaDot} />
-          <span>{formatDate(post.date)}</span>
+          <span>{formatDate(post.date, lang)}</span>
         </div>
       </div>
     </div>

@@ -1,23 +1,60 @@
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useAppStore } from '@shared/store'
+import { getT } from '@shared/lib/i18n'
 import * as styles from './Footer.css'
 
+
 export function Footer() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { lang, isDarkMode } = useAppStore()
+  const t = getT(lang)
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    if (href.startsWith('/')) {
+      navigate(href)
+      return
+    }
+    if (location.pathname !== '/') {
+      navigate('/')
+      setTimeout(() => {
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+      }, 400)
+      return
+    }
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footerLeft}>
-        <span className={styles.footerLogo}>TaupT</span>
-        <p className={styles.footerDesc}>
-          Creative technology studio crafting meaningful digital experiences.
-        </p>
+        <span className={styles.footerLogo}>
+          <img
+            src="/images/taupt_logo_black.png"
+            alt="TaupT"
+            className={styles.footerLogoImg}
+            style={isDarkMode ? { filter: 'invert(1)' } : undefined}
+          />
+        </span>
+        <p className={styles.footerDesc}>{t.footer.desc}</p>
       </div>
 
       <div className={styles.footerRight}>
         <div className={styles.footerLinks}>
-          <a href="#about" className={styles.footerLink}>Who we are</a>
-          <a href="#work" className={styles.footerLink}>Work</a>
-          <a href="#contact" className={styles.footerLink}>Contact</a>
+          {t.footer.links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className={styles.footerLink}
+              onClick={(e) => handleLinkClick(e, link.href)}
+            >
+              {link.label}
+            </a>
+          ))}
         </div>
         <p className={styles.copyright}>
-          &copy; {new Date().getFullYear()} TaupT. All rights reserved.
+          &copy; {new Date().getFullYear()} TaupT. {t.footer.rights}
         </p>
       </div>
     </footer>

@@ -1,16 +1,12 @@
 import { useRef, useEffect, useState } from 'react'
 import { gsap } from '@shared/lib/gsap'
 import { useAppStore } from '@shared/store'
+import { getT } from '@shared/lib/i18n'
 import * as styles from './About.css'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const BASE = 'https://www.kacelab.com/img/main'
-
-const KEYWORDS = [
-  'Design', 'Frontend', 'UX/UI', 'Branding', 'Strategy',
-  'Backend', 'Creative', 'Mobile', 'AI', 'Web3',
-]
 
 const PARTNER_LOGOS = [
   `${BASE}/ms2_part1.png`,
@@ -26,46 +22,15 @@ const MEMBER_THUMBS = [
   `${BASE}/ms2_member_thum4.jpg`,
 ]
 
-interface StackCardData {
-  title: string
-  desc: string
-  bg: string
-  color: string
-  img: string
-}
-
-const STACK_CARDS: StackCardData[] = [
-  {
-    title: 'Career',
-    desc: '함께 성장할 인재를 찾습니다',
-    bg: '#141519',
-    color: '#ffffff',
-    img: `${BASE}/ms2_career.jpg`,
-  },
-  {
-    title: 'Contact',
-    desc: '프로젝트를 시작해보세요',
-    bg: '#4B4C50',
-    color: '#ffffff',
-    img: `${BASE}/ms2_contact.jpg`,
-  },
-  {
-    title: 'Service',
-    desc: '다양한 서비스를 제공합니다',
-    bg: '#BDBEC0',
-    color: '#222222',
-    img: `${BASE}/ms2_counseling.jpg`,
-  },
-  {
-    title: 'About Us',
-    desc: 'TaupT를 소개합니다',
-    bg: 'var(--color-bgSecondary, #f5f5f3)',
-    color: 'var(--color-text, #0d0d0d)',
-    img: `${BASE}/ms2_KSPM.jpg`,
-  },
+const STACK_CARD_STYLES = [
+  { bg: '#141519', color: '#ffffff', img: `${BASE}/ms2_career.jpg` },
+  { bg: '#4B4C50', color: '#ffffff', img: `${BASE}/ms2_contact.jpg` },
+  { bg: '#BDBEC0', color: '#222222', img: `${BASE}/ms2_counseling.jpg` },
+  { bg: 'var(--color-bgSecondary, #f5f5f3)', color: 'var(--color-text, #0d0d0d)', img: `${BASE}/ms2_KSPM.jpg` },
 ]
 
-const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+const DAYS_KO = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일']
+const DAYS_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
 // ─── Stacked card height helper ──────────────────────────────────────────────
 
@@ -89,10 +54,13 @@ export function About() {
   const rightRef = useRef<HTMLDivElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
-  const { isDarkMode, toggleDarkMode } = useAppStore()
+  const { isDarkMode, lang, toggleDarkMode } = useAppStore()
+  const t = getT(lang)
   const [activeCard, setActiveCard] = useState<number | null>(null)
   const [time, setTime] = useState('')
   const [day, setDay] = useState('')
+
+  const DAYS = lang === 'ko' ? DAYS_KO : DAYS_EN
 
   // Live clock
   useEffect(() => {
@@ -106,7 +74,7 @@ export function About() {
     tick()
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
-  }, [])
+  }, [DAYS])
 
   // GSAP scroll reveal
   useEffect(() => {
@@ -143,7 +111,6 @@ export function About() {
     return () => ctx.revert()
   }, [])
 
-  // Duplicate logos for seamless marquee
   const allLogos = [...PARTNER_LOGOS, ...PARTNER_LOGOS]
 
   return (
@@ -155,7 +122,7 @@ export function About() {
 
           {/* left1: floating keyword tags */}
           <div className={styles.left1}>
-            {KEYWORDS.map((kw, i) => (
+            {t.about.keywords.map((kw, i) => (
               <span
                 key={kw}
                 className={styles.keyword}
@@ -172,7 +139,7 @@ export function About() {
           {/* left2: dark mode toggle card */}
           <div className={styles.left2} onClick={toggleDarkMode}>
             <div className={styles.left2BgImg} />
-            <span className={styles.left2Label}>Theme</span>
+            <span className={styles.left2Label}>{t.about.theme}</span>
             <div className={styles.left2Text}>Dark Mode / Light Mode</div>
             <div className={styles.toggleSwitch}>
               <div
@@ -183,20 +150,18 @@ export function About() {
 
           {/* left3: member card before/after flip */}
           <div className={styles.left3}>
-            {/* before state */}
             <div className={styles.left3Before}>
               <div className={styles.left3BeforeOverlay} />
               <div className={styles.left3BeforeContent}>
                 <div style={{ fontSize: '0.75rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)', marginBottom: '0.5rem' }}>
-                  Team
+                  {t.about.teamLabel}
                 </div>
                 <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#ffffff' }}>
-                  Our Team
+                  {t.about.teamTitle}
                 </div>
               </div>
             </div>
 
-            {/* after state */}
             <div className={styles.left3After}>
               <div className={styles.left3ThumbGrid}>
                 {MEMBER_THUMBS.map((src, i) => (
@@ -207,7 +172,7 @@ export function About() {
                   />
                 ))}
               </div>
-              <div className={styles.left3MemberCount}>9 Members</div>
+              <div className={styles.left3MemberCount}>{t.about.memberCount}</div>
             </div>
           </div>
         </div>
@@ -215,13 +180,10 @@ export function About() {
         {/* ── RIGHT COLUMN ── */}
         <div className={styles.rightCol} ref={rightRef}>
 
-          {/* ms2Top */}
           <div className={styles.ms2Top}>
 
-            {/* topLeft */}
             <div className={styles.topLeft}>
 
-              {/* topRow: Work card + Who We Are card */}
               <div className={styles.topRow}>
 
                 {/* Work card */}
@@ -232,10 +194,10 @@ export function About() {
                   />
                   <div className={styles.bgImgOverlay} />
                   <div className={styles.cardContent}>
-                    <span className={styles.cardLabel}>Work</span>
+                    <span className={styles.cardLabel}>{t.about.workTitle}</span>
                     <div>
-                      <div className={styles.cardNumber}>50+</div>
-                      <div className={styles.cardTitle}>Work</div>
+                      <div className={styles.cardNumber}>{t.about.workNumber}</div>
+                      <div className={styles.cardTitle}>{t.about.workTitle}</div>
                     </div>
                   </div>
                 </div>
@@ -262,7 +224,6 @@ export function About() {
               </div>
             </div>
 
-            {/* topRight */}
             <div className={styles.topRight}>
 
               {/* Culture card */}
@@ -273,23 +234,23 @@ export function About() {
                 />
                 <div className={styles.bgImgOverlay} />
                 <div className={styles.cardContent}>
-                  <span className={styles.cardLabel}>Culture</span>
+                  <span className={styles.cardLabel}>{t.about.cultureTitle}</span>
                   <div>
-                    <div className={styles.cardNumber}>8+</div>
-                    <div className={styles.cardTitle}>Our Culture</div>
+                    <div className={styles.cardNumber}>{t.about.cultureNumber}</div>
+                    <div className={styles.cardTitle}>{t.about.cultureTitle}</div>
                   </div>
                 </div>
               </div>
 
               {/* Stacked cards */}
               <div className={styles.stackedCards}>
-                {STACK_CARDS.map((card, i) => (
+                {t.about.stackCards.map((card, i) => (
                   <div
                     key={card.title}
                     className={styles.stackCard}
                     style={{
-                      backgroundColor: card.bg,
-                      color: card.color,
+                      backgroundColor: STACK_CARD_STYLES[i].bg,
+                      color: STACK_CARD_STYLES[i].color,
                       height: getCardHeight(i, activeCard),
                       zIndex: i + 1,
                     }}
@@ -298,13 +259,13 @@ export function About() {
                   >
                     <div
                       className={`${styles.stackCardBgImg}${activeCard === i ? ` ${styles.stackCardBgImgActive}` : ''}`}
-                      style={{ backgroundImage: `url(${card.img})` }}
+                      style={{ backgroundImage: `url(${STACK_CARD_STYLES[i].img})` }}
                     />
                     <div className={styles.stackCardContent}>
-                      <div className={styles.stackCardTitle} style={{ color: card.color }}>
+                      <div className={styles.stackCardTitle} style={{ color: STACK_CARD_STYLES[i].color }}>
                         {card.title}
                       </div>
-                      <div className={styles.stackCardDesc} style={{ color: card.color }}>
+                      <div className={styles.stackCardDesc} style={{ color: STACK_CARD_STYLES[i].color }}>
                         {card.desc}
                       </div>
                     </div>
@@ -317,13 +278,11 @@ export function About() {
           {/* ms2Bottom */}
           <div className={styles.ms2Bottom} ref={bottomRef}>
 
-            {/* Clock */}
             <div className={styles.bottomTime}>
               <div className={styles.clockDay}>{day}</div>
               <div className={styles.clockTime}>{time}</div>
             </div>
 
-            {/* Partner logos marquee */}
             <div className={styles.bottomMarquee}>
               <div className={styles.marqueeTrack}>
                 {allLogos.map((src, i) => (
@@ -334,9 +293,8 @@ export function About() {
               </div>
             </div>
 
-            {/* Dark mode toggle bottom card */}
             <div className={styles.bottomDark} onClick={toggleDarkMode}>
-              <span className={styles.bottomDarkLabel}>Theme</span>
+              <span className={styles.bottomDarkLabel}>{t.about.theme}</span>
               <span className={styles.bottomDarkIcon}>{isDarkMode ? '☀️' : '🌙'}</span>
               <span className={styles.bottomDarkTitle}>
                 {isDarkMode ? 'Light Mode' : 'Dark Mode'}

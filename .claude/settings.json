@@ -11,7 +11,8 @@
       "Bash(curl -s https://www.kacelab.com/js/main.js)"
     ],
     "additionalDirectories": [
-      "c:\\Users\\nbware\\.claude\\projects\\c--WorkSpace-Projects--personal-taupt-official\\memory"
+      "c:\\Users\\nbware\\.claude\\projects\\c--WorkSpace-Projects--personal-taupt-official\\memory",
+      "c:\\WorkSpace\\Projects\\_personal\\taupt-official\\content\\posts"
     ]
   }
 }

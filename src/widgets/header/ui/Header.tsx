@@ -1,23 +1,26 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppStore } from '@shared/store'
+import { getT } from '@shared/lib/i18n'
 import * as styles from './Header.css'
-
-const navLinks = [
-  { label: 'Who we are', href: '#about' },
-  { label: 'Work', href: '#work' },
-  { label: 'Contact', href: '#contact' },
-  { label: 'Blog', href: '/blog' },
-]
 
 export function Header() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { isMenuOpen, isDarkMode, toggleMenu, toggleDarkMode } = useAppStore()
+  const { isMenuOpen, isDarkMode, lang, toggleMenu, toggleDarkMode, toggleLang } = useAppStore()
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [closing, setClosing] = useState(false)
   const lastY = useRef(0)
+
+  const t = getT(lang)
+
+  const navLinks = [
+    { label: t.nav.whoWeAre, href: '#about' },
+    { label: t.nav.work, href: '#work' },
+    { label: t.nav.contact, href: '#contact' },
+    { label: t.nav.blog, href: '/blog' },
+  ]
 
   // Scroll-based header state
   useEffect(() => {
@@ -35,7 +38,6 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close menu with animation
   const handleCloseMenu = () => {
     setClosing(true)
     setTimeout(() => {
@@ -50,7 +52,6 @@ export function Header() {
       setTimeout(() => navigate(href), isMenuOpen ? 360 : 0)
       return
     }
-    // anchor scroll — if not on home page, navigate there first
     if (location.pathname !== '/') {
       navigate('/')
       setTimeout(() => {
@@ -63,8 +64,6 @@ export function Header() {
     }, isMenuOpen ? 360 : 0)
   }
 
-  // 다크모드일 때만 상단에서 흰색 텍스트 (Hero 배경이 어두움)
-  // 라이트모드 상단은 Hero 배경이 흰색이므로 테마 텍스트색 그대로 사용
   const atTop = !scrolled && isDarkMode
 
   const headerClass = [
@@ -78,10 +77,14 @@ export function Header() {
       <header className={headerClass}>
         <a
           href="/"
-          className={`${styles.logo} ${atTop ? styles.logoWhite : ''}`}
+          className={styles.logo}
           onClick={(e) => { e.preventDefault(); location.pathname === '/' ? window.scrollTo({ top: 0, behavior: 'smooth' }) : navigate('/') }}
         >
-          TaupT
+          <img
+            src="/images/taupt_logo_black.png"
+            alt="TaupT"
+            className={`${styles.logoImg}${atTop || isDarkMode ? ` ${styles.logoImgWhite}` : ''}`}
+          />
         </a>
 
         <nav className={styles.nav}>
@@ -98,6 +101,17 @@ export function Header() {
         </nav>
 
         <div className={styles.actions}>
+          {/* Language toggle */}
+          <button
+            className={`${styles.darkModeBtn} ${atTop ? styles.darkModeBtnWhite : ''}`}
+            onClick={toggleLang}
+            aria-label="Toggle language"
+            style={{ fontWeight: 600, fontSize: '12px', letterSpacing: '0.5px' }}
+          >
+            {lang === 'ko' ? 'EN' : 'KO'}
+          </button>
+
+          {/* Dark mode toggle */}
           <button
             className={`${styles.darkModeBtn} ${atTop ? styles.darkModeBtnWhite : ''}`}
             onClick={toggleDarkMode}
@@ -155,9 +169,14 @@ export function Header() {
 
           <div className={styles.mobileMenuBottom}>
             <span className={styles.mobileMenuBottomText}>TaupT © {new Date().getFullYear()}</span>
-            <button className={styles.mobileDarkBtn} onClick={toggleDarkMode}>
-              {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-            </button>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button className={styles.mobileDarkBtn} onClick={toggleLang}>
+                {lang === 'ko' ? '🌐 English' : '🌐 한국어'}
+              </button>
+              <button className={styles.mobileDarkBtn} onClick={toggleDarkMode}>
+                {isDarkMode ? '☀️ Light' : '🌙 Dark'}
+              </button>
+            </div>
           </div>
         </nav>
       )}
