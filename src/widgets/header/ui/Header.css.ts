@@ -225,6 +225,8 @@ export const mobileNavList = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '4px',
+  alignItems: 'center',
+  marginTop: '10%',
 })
 
 export const mobileNavLink = style({

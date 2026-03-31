@@ -16,7 +16,7 @@ const PARTNER_LOGOS = [
 ]
 
 const MEMBER_THUMBS = [
-  `${BASE}/ms2_member_thum1.jpg`,
+  `/images/samples/about_1.png`,
   `${BASE}/ms2_member_thum2.jpg`,
   `${BASE}/ms2_member_thum3.jpg`,
   `${BASE}/ms2_member_thum4.jpg`,
@@ -205,7 +205,7 @@ export function About() {
                 {/* Who We Are card */}
                 <div className={styles.whoCard}>
                   <img
-                    src={`${BASE}/ms2_member.jpg`}
+                    src={`/images/samples/b.jpg`}
                     alt="Who We Are"
                     className={styles.whoCardImg}
                   />
@@ -216,7 +216,7 @@ export function About() {
               {/* Video card */}
               <div className={styles.videoCard}>
                 <img
-                  src={`${BASE}/portfolio2.jpg`}
+                  src={`/images/samples/bluegreen.jpg`} 
                   alt="Portfolio"
                   className={styles.videoCardImg}
                 />

@@ -67,7 +67,7 @@ const translations = {
     blog: {
       label: 'Blog',
       title: 'Insights &\nStories',
-      desc: 'TaupT 팀이 차등 프라이버시, 연합학습, 데이터 보안에 대해 이야기합니다.',
+      desc: 'TaupT 팀이 차등 프라이버시, 연합학습, 통계, 데이터 보안에 대해 이야기합니다.',
       allCategory: '전체',
       empty: '해당 카테고리에 포스트가 없습니다.',
       back: '← 블로그로 돌아가기',

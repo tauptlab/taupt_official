@@ -205,7 +205,7 @@ export const metaDot = style({
 /* ─── Post grid ─── */
 export const grid = style({
   display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
+  gridTemplateColumns: 'repeat(4, 1fr)',
   gap: '24px',
   '@media': {
     '(max-width: 1100px)': {

@@ -359,7 +359,7 @@ export const relatedTitle = style({
 
 export const relatedGrid = style({
   display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
+  gridTemplateColumns: 'repeat(4, 1fr)',
   gap: '20px',
   '@media': {
     '(max-width: 900px)': {

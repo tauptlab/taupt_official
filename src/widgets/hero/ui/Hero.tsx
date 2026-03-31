@@ -103,10 +103,13 @@ export function Hero() {
       <div ref={stickyRef} className={styles.sticky}>
 
         <div ref={imgWrapRef} className={styles.imgWrap}>
-          <img
-            src="https://www.kacelab.com/img/main/ms2_member.jpg"
-            alt="TaupT team"
+          <video
+            src="/images/samples/hero.mp4"
             className={styles.bgImg}
+            autoPlay
+            muted
+            loop
+            playsInline
           />
         </div>
 

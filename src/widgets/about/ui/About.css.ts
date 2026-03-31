@@ -107,7 +107,7 @@ export const left2 = style({
 export const left2BgImg = style({
   position: 'absolute',
   inset: 0,
-  backgroundImage: 'url(https://www.kacelab.com/img/main/ms2_light.jpg)',
+  backgroundImage: 'url(/images/samples/3d-render-glassy-greenwebp.webp)',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   opacity: 0,
@@ -188,7 +188,7 @@ export const left3 = style({
 export const left3Before = style({
   position: 'absolute',
   inset: 0,
-  backgroundImage: 'url(https://www.kacelab.com/img/main/ms2_member.jpg)',
+  backgroundImage: 'url(/images/samples/about_1.png)',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   opacity: 1,
