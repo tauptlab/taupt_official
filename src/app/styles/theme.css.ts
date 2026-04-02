@@ -1,4 +1,7 @@
-import { createTheme, createThemeContract } from '@vanilla-extract/css'
+import {
+  createTheme,
+  createThemeContract,
+} from '@vanilla-extract/css';
 
 export const themeContract = createThemeContract({
   color: {
@@ -50,7 +53,7 @@ export const lightTheme = createTheme(themeContract, {
   },
   font: {
     body: "'Pretendard', system-ui, sans-serif",
-    mono: "'JetBrains Mono', 'Courier New', monospace",
+    mono: "'Pretendard', 'Courier New', monospace",
   },
   radius: {
     sm: '4px',

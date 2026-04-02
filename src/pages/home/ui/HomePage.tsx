@@ -1,9 +1,8 @@
-import { Header } from '@widgets/header'
-import { Footer } from '@widgets/footer'
-import { Hero } from '@widgets/hero'
-import { About } from '@widgets/about'
-import { Work } from '@widgets/work'
-import { Contact } from '@widgets/contact'
+import { About } from '@widgets/about';
+import { Contact } from '@widgets/contact';
+import { Footer } from '@widgets/footer';
+import { Header } from '@widgets/header';
+import { Hero } from '@widgets/hero';
 
 export function HomePage() {
   return (
@@ -12,7 +11,7 @@ export function HomePage() {
       <main>
         <Hero />
         <About />
-        <Work />
+        {/* <Work /> */}
         <Contact />
       </main>
       <Footer />

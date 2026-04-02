@@ -1,8 +1,19 @@
-import { useState, useEffect, useRef } from 'react'
-import { useNavigate, useLocation, useParams } from 'react-router-dom'
-import { useAppStore } from '@shared/store'
-import { getT } from '@shared/lib/i18n'
-import * as styles from './Header.css'
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
+
+import { getT } from '@shared/lib/i18n';
+import { useAppStore } from '@shared/store';
+
+import * as styles from './Header.css';
 
 export function Header() {
   const navigate = useNavigate()
@@ -17,9 +28,8 @@ export function Header() {
   const t = getT(lang)
 
   const navLinks = [
-    { label: t.nav.whoWeAre, href: '#about' },
-    { label: t.nav.work, href: '#work' },
-    { label: t.nav.contact, href: '#contact' },
+    { label: t.nav.products, href: `/${locale}/products` },
+    { label: t.nav.technology, href: `/${locale}/technology` },
     { label: t.nav.blog, href: `/${locale}/blog` },
   ]
 
